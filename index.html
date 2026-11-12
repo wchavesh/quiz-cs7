@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS &amp; Robotics 7° Term III Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one centered card column (max 760px); start → quiz → results views swap in place. */
+:root{
+  --bg:#F3F6FA; --surface:#FFFFFF; --ink:#0E1A2B; --muted:#4A5568; --line:#D5DEEA;
+  --accent:#1D4ED8; --accent-soft:#E6EEFC; --accent-ink:#1E3A8A;
+  --warm:#C2410C; --warm-soft:#FDEBDD; --warm-ink:#7C2D12;
+  --good:#15803D; --good-soft:#DCFCE7; --bad:#B91C1C; --bad-soft:#FEE2E2;
+  --code-bg:#0E1A2B; --code-ink:#E6EDF7;
+  --display:'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --body:'Lexend', 'Segoe UI', system-ui, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1320; --surface:#132033; --ink:#E8EEF7; --muted:#A9B6C8; --line:#26364F;
+    --accent:#6E9BFF; --accent-soft:#1B2D4D; --accent-ink:#B9CDFF;
+    --warm:#FB923C; --warm-soft:#3A2416; --warm-ink:#FED7AA;
+    --good:#4ADE80; --good-soft:#12301F; --bad:#F87171; --bad-soft:#3A1717;
+    --code-bg:#07101C; --code-ink:#E6EDF7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1320; --surface:#132033; --ink:#E8EEF7; --muted:#A9B6C8; --line:#26364F;
+  --accent:#6E9BFF; --accent-soft:#1B2D4D; --accent-ink:#B9CDFF;
+  --warm:#FB923C; --warm-soft:#3A2416; --warm-ink:#FED7AA;
+  --good:#4ADE80; --good-soft:#12301F; --bad:#F87171; --bad-soft:#3A1717;
+  --code-bg:#07101C; --code-ink:#E6EDF7;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:28px 16px 64px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,5vw,42px)}
+h2{font-size:clamp(22px,3.6vw,28px)}
+.brand{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600;letter-spacing:.04em}
+.pill.solid{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .pill.solid{color:#0B1320}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pill.solid{color:#0B1320}}
+.pill.soft{background:var(--accent-soft);color:var(--accent-ink)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:18px}
+.muted{color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fact{background:var(--accent-soft);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column}
+.fact b{font-family:var(--display);font-size:26px;color:var(--accent-ink)}
+.fact span{font-size:14px;color:var(--muted)}
+label.field{display:flex;flex-direction:column;gap:8px;font-weight:600}
+input[type="text"]{font:inherit;font-weight:400;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+input[type="text"]:focus{outline:none;border-color:var(--accent)}
+.err{color:var(--bad);font-size:15px;min-height:1em}
+.btn{font:inherit;font-weight:600;border-radius:12px;padding:13px 22px;border:2px solid transparent;cursor:pointer;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.primary{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#0B1320}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0B1320}}
+.btn.primary:hover{filter:brightness(1.08)}
+a.btn{text-decoration:none}
+.btn.wa{background:#128C4A;color:#fff}
+.btn.wa:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--accent)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:focus-visible,.opt:focus-within,.dot:focus-visible,.tab:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.row.split{justify-content:space-between}
+.progress{height:10px;background:var(--accent-soft);border-radius:999px;overflow:hidden}
+.progress>i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .25s}
+.qmeta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.qtext{font-size:21px;font-weight:600;line-height:1.4}
+code{font-family:var(--mono);font-size:.92em;background:var(--accent-soft);color:var(--accent-ink);padding:1px 6px;border-radius:6px}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);font-size:15px;line-height:1.6;padding:16px 18px;border-radius:14px;overflow-x:auto}
+.opts{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;border:0}
+.opt{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;border:2px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;background:var(--surface)}
+.opt:hover{border-color:var(--accent)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt .key{width:36px;height:36px;border-radius:10px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--display);color:var(--muted)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .key{background:var(--accent);border-color:var(--accent);color:#fff}
+.dots{display:flex;flex-wrap:wrap;gap:8px}
+.dot{width:38px;height:38px;border-radius:10px;border:2px solid var(--line);background:var(--surface);color:var(--muted);font:600 14px var(--body);cursor:pointer}
+.dot.done{background:var(--accent-soft);border-color:var(--accent-soft);color:var(--accent-ink)}
+.dot.cur{border-color:var(--accent);color:var(--ink)}
+.notice{background:var(--warm-soft);color:var(--warm-ink);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.score{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.ring{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--accent-soft) 0)}
+.ring>div{width:118px;height:118px;border-radius:50%;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring b{font-family:var(--display);font-size:38px;font-variant-numeric:tabular-nums;line-height:1}
+.ring span{font-size:13px;color:var(--muted)}
+.level{font-family:var(--display);font-size:28px;font-weight:700}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 120px 52px;gap:12px;align-items:center;font-size:15px}
+.bar .track{height:10px;background:var(--accent-soft);border-radius:999px;overflow:hidden}
+.bar .track i{display:block;height:100%;border-radius:999px}
+.bar .num{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{font:inherit;font-size:15px;font-weight:600;padding:8px 14px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.review{display:flex;flex-direction:column;gap:14px}
+.ritem{border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;background:var(--surface);border-top:6px solid var(--good)}
+.ritem.wrong{border-top-color:var(--bad)}
+.ritem .head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--muted)}
+.tag{border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700}
+.tag.ok{background:var(--good-soft);color:var(--good)}
+.tag.no{background:var(--bad-soft);color:var(--bad)}
+.ans{display:flex;flex-direction:column;gap:6px;font-size:16px}
+.ans .lbl{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ans .yours.no{color:var(--bad)}
+.ans .yours.ok{color:var(--good)}
+.why{background:var(--accent-soft);border-radius:12px;padding:12px 14px;font-size:16px}
+.why b{color:var(--accent-ink)}
+[hidden]{display:none !important}
+.copied{font-size:14px;color:var(--good)}
+@media (max-width:560px){
+  .facts{grid-template-columns:1fr}
+  .score{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .bar{grid-template-columns:minmax(0,1fr) 80px 44px}
+  .card{padding:20px}
+  .row.split .btn{flex:1}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <span class="pill solid">7th Grade · III Term</span>
+    <span>Computer Science &amp; Robotics · Knowledge check</span>
+  </div>
+
+  <!-- START -->
+  <section id="start" class="card">
+    <h1>Test what you learned this term</h1>
+    <p class="muted" style="margin:0">From automated systems to the Smart Turtle Egg Incubator. Each attempt picks 15 different questions from all the cycles, in a random order.</p>
+    <div class="facts">
+      <div class="fact"><b>15</b><span>questions per attempt</span></div>
+      <div class="fact"><b>6</b><span>topics: Cycles 1–8</span></div>
+      <div class="fact"><b>4</b><span>options, one correct</span></div>
+    </div>
+    <form id="startForm" class="card" style="padding:0;border:0;gap:12px" novalidate>
+      <label class="field" for="studentName">Your full name
+        <input type="text" id="studentName" autocomplete="name" placeholder="e.g. Sofía Martínez" maxlength="60">
+      </label>
+      <div id="nameErr" class="err" role="alert"></div>
+      <div class="row"><button type="submit" class="btn primary">Start the quiz</button></div>
+    </form>
+    <p class="muted" style="margin:0;font-size:14px">You can go back and change any answer before you finish. At the end you will see your score and an explanation for every question, and you will send your results by WhatsApp.</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="card" hidden>
+    <div class="qmeta"><span id="qCount">Question 1 of 15</span><span id="qName"></span></div>
+    <div class="progress" aria-hidden="true"><i id="qBar" style="width:0%"></i></div>
+    <div><span id="qCycle" class="pill soft">Cycle</span></div>
+    <div id="qText" class="qtext"></div>
+    <pre id="qCode" hidden></pre>
+    <fieldset class="opts" id="qOpts"><legend class="muted" style="font-size:14px;margin-bottom:6px">Choose one answer</legend></fieldset>
+    <div id="finishWarn" class="notice" hidden>
+      <span id="finishWarnText"></span>
+      <div class="row">
+        <button type="button" class="btn ghost" id="goUnanswered">Go to the first unanswered</button>
+        <button type="button" class="btn primary" id="finishAnyway">Finish anyway</button>
+      </div>
+    </div>
+    <div class="row split">
+      <button type="button" class="btn ghost" id="prevBtn">← Previous</button>
+      <button type="button" class="btn primary" id="nextBtn">Next →</button>
+    </div>
+    <div>
+      <div class="muted" style="font-size:13px;margin-bottom:8px">Jump to a question (blue = answered)</div>
+      <div class="dots" id="dots"></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" hidden style="display:flex;flex-direction:column;gap:20px">
+    <div class="card">
+      <div class="score">
+        <div class="ring" id="ring" style="--p:0"><div><b id="scoreNum">0/15</b><span id="scorePct">0%</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span class="muted" id="resName"></span>
+          <span class="level" id="resLevel"></span>
+          <span id="resMsg"></span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Results by topic</h2>
+      <div class="bars" id="bars"></div>
+    </div>
+    <div class="card">
+      <div class="row split">
+        <h2>Review your answers</h2>
+        <div class="tabs" role="group" aria-label="Filter answers">
+          <button type="button" class="tab" data-f="all" aria-pressed="true">All</button>
+          <button type="button" class="tab" data-f="wrong" aria-pressed="false">Incorrect</button>
+          <button type="button" class="tab" data-f="right" aria-pressed="false">Correct</button>
+        </div>
+      </div>
+      <div class="review" id="review"></div>
+    </div>
+    <div class="card" style="gap:12px">
+      <h2>Send your results</h2>
+      <p class="muted" style="margin:0">Tap the button: WhatsApp opens with your results already written. Then tap <b>Send</b> so your results are delivered.</p>
+      <div class="row"><a class="btn wa" id="waBtn" href="https://wa.me/573338123753" target="_blank" rel="noopener">Send my results on WhatsApp</a></div>
+    </div>
+    <div class="row">
+      <button type="button" class="btn ghost" id="again">Try a new quiz</button>
+      <button type="button" class="btn ghost" id="copyBtn">Copy my results</button>
+      <span id="copied" class="copied" role="status"></span>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const CYCLES = {
+  c1: 'Cycle 1 · Automated Systems',
+  c2: 'Cycle 2 · Automation for Conservation',
+  c3: 'Cycle 3 · Variables & Data Types',
+  c4: 'Cycle 4 · Conditionals & Operators',
+  c5: 'Cycle 5 · Loops & Maintainable Programs',
+  c6: 'Cycles 6–8 · Turtle Egg Incubator'
+};
+/* How many questions each attempt takes from each topic (total 15). */
+const DRAW = { c1: 2, c2: 1, c3: 3, c4: 3, c5: 3, c6: 3 };
+
+/* o[0] is always the correct option; options are shuffled when shown. */
+const BANK = [
+  // ---- Cycle 1
+  { c:'c1', q:'In an automated system, which part is the “brain” that makes the decisions?', o:['Microprocessor','Sensor','Actuator','LED'], e:'The microprocessor (for example, the Arduino UNO) reads the input data and decides what to do by following the program.' },
+  { c:'c1', q:'Which of these is a sensor?', o:['LDR (photoresistor)','Servo motor','Buzzer','Relay'], e:'An LDR measures light and turns it into data. A servo, a buzzer and a relay are outputs or actuators.' },
+  { c:'c1', q:'What is the correct order of information in an automated system?', o:['Input → Process → Output','Output → Process → Input','Process → Input → Output','Input → Output → Process'], e:'Sensors collect the input, the microprocessor processes it, and the actuators produce the output.' },
+  { c:'c1', q:'What does an actuator do?', o:['Converts energy into physical motion','Measures temperature','Stores the program','Shows text on a screen'], e:'Actuators such as motors move things. The main types are electric, hydraulic and pneumatic.' },
+  { c:'c1', q:'Which of these is a DISADVANTAGE of automation?', o:['High start-up cost','High speed','Better accuracy','Steady output'], e:'Automated systems are expensive to build and install. High speed, accuracy and steady output are advantages.' },
+  { c:'c1', q:'In the night-light code below, the LDR reads 250. What happens?', code:'int light = analogRead(A0);\nif (light <= 400) {\n  digitalWrite(greenLed, HIGH);\n} else {\n  digitalWrite(greenLed, LOW);\n}', o:['The LED turns ON','The LED turns OFF','The program shows an error','Nothing changes'], e:'250 is less than or equal to 400, so the condition is true and the LED turns on (it is dark).' },
+  { c:'c1', q:'Which of these is NOT an input device?', o:['Buzzer','LDR','Push button','DHT11 sensor'], e:'A buzzer produces sound, so it is an output. The LDR, the button and the DHT11 all send information into the Arduino.' },
+  { c:'c1', q:'Which is an example of an automated system in a smart home?', o:['Lights that turn on by themselves when it gets dark','A light switch you press by hand','A paper calendar','A manual can opener'], e:'An automated system uses a sensor (light level) and decides by itself, with no person pressing anything.' },
+
+  // ---- Cycle 2
+  { c:'c2', q:'What was the purpose of the trip to Río Claro?', o:['To recognize natural resources and learn about species conservation','To buy Arduino parts','To test video games','To build a parking barrier'], e:'The visit to Río Claro (Antioquia) inspired the term project: an automated turtle egg incubator.' },
+  { c:'c2', q:'Which component in our incubator measures BOTH temperature and humidity?', o:['DHT11','LDR','Servo SG90','Relay'], e:'The DHT11 is a single sensor that gives temperature and humidity readings.' },
+  { c:'c2', q:'What is the ideal incubation temperature for river turtle eggs?', o:['28 °C','18 °C','38 °C','45 °C'], e:'The safe range is 26–32 °C, and about 28 °C is ideal.' },
+  { c:'c2', q:'What does the incubation temperature decide in baby turtles?', o:['Whether they are male or female','Their color','Their size','How fast they swim'], e:'Cooler eggs tend to produce males and warmer eggs tend to produce females.' },
+  { c:'c2', q:'What humidity do the turtle eggs need?', o:['About 70–80 %','About 10–20 %','Exactly 0 %','About 100 %, under water'], e:'The eggs need a humid environment of about 70–80 %, like a natural nest in river sand.' },
+  { c:'c2', q:'A camera trap takes photos of animals only when they pass by. Which sensor does it need?', o:['A motion sensor','A temperature sensor','A buzzer','A relay'], e:'A motion sensor detects movement and tells the camera when to take the photo. This saves battery and memory.' },
+
+  // ---- Cycle 3
+  { c:'c3', q:'What is a variable?', o:['A named place in memory that stores a value that can change','A value that can never change','A type of sensor','An error in the code'], e:'A variable is like a labeled box: its content can change while the program runs.' },
+  { c:'c3', q:'In the code below, what is "Dog"?', code:'pet = "Dog"', o:['The value stored in the variable','The name of the variable','The data type','A constant'], e:'pet is the name of the variable, "Dog" is the value, and its data type is text (string).' },
+  { c:'c3', q:'Which variable name is INVALID?', o:['`2myvar`','`my_var`','`myVar2`','`_myvar`'], e:'Variable names cannot start with a number. Hyphens and spaces are not allowed either.' },
+  { c:'c3', q:'Which data type should store the value 27.5?', o:['Real (float)','Integer (int)','Boolean','Character'], e:'27.5 has decimals, so it needs a real/float type. An int would drop the .5.' },
+  { c:'c3', q:'What is true about this line?', code:'const int ledPin = 10;', o:['ledPin keeps the value 10 for the whole program','ledPin can change later','It is a sensor reading','It stores text'], e:'const makes it a constant: its value cannot change while the program runs.' },
+  { c:'c3', q:'Trace the code. What is the final value of a?', code:'a = 5\nb = 3\na = b\nb = 7', o:['3','5','7','10'], e:'Instructions run in sequence. a = b copies 3 into a. Changing b afterwards does not change a.' },
+  { c:'c3', q:'What range of values does `analogWrite()` use on a PWM (~) pin?', o:['0–255','0–1','0–100','0–1023'], e:'0 is fully off and 255 is full brightness. 0–1023 is the range of analogRead.' },
+  { c:'c3', q:'Which value is a Boolean?', o:['true','"true"','25','27.5'], e:'A Boolean can only be true or false. "true" in quotes is text (a string).' },
+
+  // ---- Cycle 4
+  { c:'c4', q:'What is the difference between `=` and `==`?', o:['`=` stores a value and `==` compares two values','They are the same','`=` compares and `==` stores','`==` is only used in loops'], e:'x = 5 puts 5 into x, while x == 5 asks “is x equal to 5?”.' },
+  { c:'c4', q:'If x = 5, what is the result of this expression?', code:'x > 3 and x < 4', o:['False','True','5','Error'], e:'AND needs both conditions to be true. 5 > 3 is true but 5 < 4 is false, so the result is False.' },
+  { c:'c4', q:'If x = 5, what is the result of this expression?', code:'x > 3 or x < 4', o:['True','False','4','Error'], e:'OR needs at least one condition to be true, and 5 > 3 is true.' },
+  { c:'c4', q:'If x = 5, what is the result of this expression?', code:'not (x > 3)', o:['False','True','3','Error'], e:'x > 3 is True, and NOT reverses it to False.' },
+  { c:'c4', q:'In Arduino, what is the value of c?', code:'int a = 7;\nint b = 2;\nint c = a / b;', o:['3','3.5','4','2'], e:'Dividing two integers drops the decimals. To get 3.5 you need floats, for example 7.0 / 2.' },
+  { c:'c4', q:'When does the `else` block run?', o:['When all the conditions above it are false','Always','When the first condition is true','Never'], e:'else is the default action: it runs only when no previous condition was true.' },
+  { c:'c4', q:'The readings are light = 300 and soil = 200. Is the pump ON?', code:'if (light > 500) {        // day?\n  if (soil < 300) {       // dry?\n    digitalWrite(pumpPin, HIGH);\n  }\n} else {\n  digitalWrite(pumpPin, LOW);\n}', o:['No, because it is night (the first condition is false)','Yes, because the soil is dry','Yes, always','The program shows an error'], e:'The outer condition (300 > 500) is false, so the inner check never runs and the pump stays off.' },
+  { c:'c4', q:'Which operator means “not equal to”?', o:['`!=`','`==`','`=<`','`<>=`'], e:'!= checks that two values are different. For example, 5 != 3 is true.' },
+
+  // ---- Cycle 5
+  { c:'c5', q:'What is a loop?', o:['Instructions that repeat until a stop condition is met','A type of variable','A sensor','An error message'], e:'Loops avoid writing the same instructions many times, like taking candies out of the pumpkin one by one.' },
+  { c:'c5', q:'When is a `while` loop the better choice?', o:['When you don’t know how many repetitions there will be','When you know exactly how many repetitions there will be','Only for lists','Never'], e:'while repeats as long as a condition is true, for example taking candies out until the pumpkin is empty.' },
+  { c:'c5', q:'What does this program print?', code:'i = 1\nwhile i <= 3:\n    print(i)\n    i = i + 1', o:['1 2 3','1 2','1 2 3 4','It never stops'], e:'It prints 1, 2 and 3. When i becomes 4, 4 <= 3 is false and the loop stops.' },
+  { c:'c5', q:'How many times does this program print Hello?', code:'for i in range(3):\n    print("Hello")', o:['3','2','4','0'], e:'range(3) gives 0, 1, 2: three repetitions.' },
+  { c:'c5', q:'Which line is COUNTING (not totalling)?', o:['`count = count + 1`','`total = total + price`','`count = 0`','`print(count)`'], e:'Counting adds 1 each time. Totalling adds a value, such as a price.' },
+  { c:'c5', q:'What is wrong with this Python line?', code:'While i <= 10:', o:['Python is case-sensitive: it must be while','Nothing, it is correct','It needs a semicolon at the end','The operator <= does not exist'], e:'Python keywords are lowercase, so While causes an error.' },
+  { c:'c5', q:'What is the value of x in the SECOND repetition?', code:'for x in ["apple", "banana", "cherry"]:\n    print(x)', o:['"banana"','"apple"','"cherry"','2'], e:'x is the iteration variable: it takes each item of the list in order, so the second value is "banana".' },
+  { c:'c5', q:'What is an infinite loop?', o:['A loop whose condition never becomes false, so it never stops','A loop that runs exactly once','A loop with no instructions inside','A very fast loop'], e:'If nothing inside the loop makes the condition false, it repeats forever. Always change the variable you are checking.' },
+
+  // ---- Cycles 6–8
+  { c:'c6', q:'What does the relay do in the incubator?', o:['Lets the Arduino switch the 110 V bulb ON and OFF','Measures humidity','Moves the eggs','Shows the temperature'], e:'The Arduino works at 5 V and cannot power a 110 V bulb directly, so the relay acts as a switch controlled by a digital pin.' },
+  { c:'c6', q:'The bulb turns ON at ≤ 27 °C and OFF at ≥ 31 °C. The sensor reads 26 °C. What happens?', o:['The bulb turns ON','The bulb turns OFF','Only the buzzer sounds','The servo stops'], e:'26 °C is too cold (≤ 27), so the bulb turns on to heat the eggs.' },
+  { c:'c6', q:'What does the program do if the DHT11 reading fails?', o:['Turns the bulb OFF for safety and activates the alert','Keeps the bulb ON','Restarts the computer','Nothing'], e:'Without data it is safer to turn off the heat and warn someone.' },
+  { c:'c6', q:'Where does the VCC pin of a sensor connect?', o:['5V','GND','A digital pin','The bulb'], e:'VCC is the positive pole (5V), GND is the ground, and Signal goes to a digital pin.' },
+  { c:'c6', q:'Which programming concept does this code show?', code:'for (pos = 0; pos <= 180; pos++) {\n  myServo.write(pos);\n}', o:['Loop','Conditional','Constant','Data type'], e:'It is a for loop that moves the servo from 0° to 180°, one degree at a time.' },
+  { c:'c6', q:'In the project rubric, how much is the simulation (circuit and programming) worth?', o:['70%','30%','50%','100%'], e:'The simulation is worth 70% and the physical assembly 30%.' },
+  { c:'c6', q:'In the Arduino IDE, what must you select before uploading the program?', o:['The board (Arduino UNO) and the port (COM#)','Only the font size','The Wi-Fi network','Nothing, it uploads by itself'], e:'Tools › Board › Arduino UNO and Tools › Port › COM# tell the IDE which board you are using and where it is connected.' },
+  { c:'c6', q:'Which component shows the temperature and humidity as text?', o:['The 16x2 LCD display (I2C)','The buzzer','The relay','The servo motor'], e:'The LCD display shows values on a screen. It connects with I2C, using the SDA and SCL pins.' },
+  { c:'c6', q:'What are the SDA and SCL pins used for in this project?', o:['Data and clock for the I2C LCD display','Powering the 110 V bulb','Ground and 5V','Moving the servo'], e:'SDA (Serial Data) sends the information and SCL (Serial Clock) keeps the timing of the transfer.' }
+];
+
+/* ---------- helpers ---------- */
+const $ = (id) => document.getElementById(id);
+function shuffle(a){ const r = a.slice(); for (let i = r.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(s){ return esc(s).replace(/`([^`]+)`/g, '<code>$1</code>'); }
+const LETTERS = ['A','B','C','D'];
+
+let state = { name:'', items:[], answers:[], idx:0, filter:'all' };
+
+function buildQuiz(){
+  let picked = [];
+  for (const c of Object.keys(DRAW)){
+    picked = picked.concat(shuffle(BANK.filter(q => q.c === c)).slice(0, DRAW[c]));
+  }
+  state.items = shuffle(picked).map(q => ({ ...q, opts: shuffle(q.o), correct: q.o[0] }));
+  state.answers = new Array(state.items.length).fill(null);
+  state.idx = 0;
+}
+
+/* ---------- start ---------- */
+$('startForm').addEventListener('submit', (ev) => {
+  ev.preventDefault();
+  const n = $('studentName').value.trim().replace(/\s+/g,' ');
+  if (n.length < 3){ $('nameErr').textContent = 'Please type your full name (at least 3 letters) to start.'; $('studentName').focus(); return; }
+  $('nameErr').textContent = '';
+  state.name = n;
+  buildQuiz();
+  show('quiz');
+  render();
+});
+
+function show(view){
+  ['start','quiz','results'].forEach(v => { $(v).hidden = v !== view; });
+  window.scrollTo({ top: 0 });
+}
+
+/* ---------- quiz ---------- */
+function render(){
+  const it = state.items[state.idx], total = state.items.length;
+  $('qCount').textContent = `Question ${state.idx + 1} of ${total}`;
+  $('qName').textContent = state.name;
+  const answered = state.answers.filter(a => a !== null).length;
+  $('qBar').style.width = (answered / total * 100) + '%';
+  $('qCycle').textContent = CYCLES[it.c];
+  $('qText').innerHTML = fmt(it.q);
+  const code = $('qCode');
+  if (it.code){ code.hidden = false; code.textContent = it.code; } else { code.hidden = true; code.textContent = ''; }
+
+  const fs = $('qOpts');
+  fs.querySelectorAll('.opt').forEach(n => n.remove());
+  it.opts.forEach((opt, i) => {
+    const id = `q${state.idx}o${i}`;
+    const lab = document.createElement('label');
+    lab.className = 'opt' + (state.answers[state.idx] === opt ? ' sel' : '');
+    lab.htmlFor = id;
+    lab.innerHTML = `<input type="radio" name="opt" id="${id}" value="${i}" ${state.answers[state.idx] === opt ? 'checked' : ''}><span class="key">${LETTERS[i]}</span><span>${fmt(opt)}</span>`;
+    lab.querySelector('input').addEventListener('change', () => {
+      state.answers[state.idx] = opt;
+      $('finishWarn').hidden = true;
+      render();
+      const again = document.getElementById(id); if (again) again.focus();
+    });
+    fs.appendChild(lab);
+  });
+
+  $('prevBtn').disabled = state.idx === 0;
+  $('nextBtn').textContent = state.idx === total - 1 ? 'Finish and see results' : 'Next →';
+
+  const dots = $('dots');
+  dots.innerHTML = '';
+  state.items.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'dot' + (state.answers[i] !== null ? ' done' : '') + (i === state.idx ? ' cur' : '');
+    b.textContent = i + 1;
+    b.setAttribute('aria-label', `Question ${i + 1}${state.answers[i] !== null ? ', answered' : ', not answered'}`);
+    if (i === state.idx) b.setAttribute('aria-current', 'step');
+    b.addEventListener('click', () => { state.idx = i; $('finishWarn').hidden = true; render(); });
+    dots.appendChild(b);
+  });
+}
+
+$('prevBtn').addEventListener('click', () => { if (state.idx > 0){ state.idx--; $('finishWarn').hidden = true; render(); } });
+$('nextBtn').addEventListener('click', () => {
+  if (state.idx < state.items.length - 1){ state.idx++; render(); return; }
+  const missing = state.answers.map((a, i) => a === null ? i + 1 : null).filter(Boolean);
+  if (missing.length){
+    $('finishWarnText').textContent = `You have ${missing.length} unanswered question${missing.length > 1 ? 's' : ''} (${missing.join(', ')}). Unanswered questions count as incorrect.`;
+    $('finishWarn').hidden = false;
+    return;
+  }
+  finish();
+});
+$('goUnanswered').addEventListener('click', () => { const i = state.answers.findIndex(a => a === null); if (i >= 0){ state.idx = i; $('finishWarn').hidden = true; render(); } });
+$('finishAnyway').addEventListener('click', finish);
+
+document.addEventListener('keydown', (ev) => {
+  if ($('quiz').hidden || ev.target.tagName === 'INPUT' && ev.target.type === 'text') return;
+  if (ev.key === 'ArrowRight' && state.idx < state.items.length - 1){ state.idx++; render(); }
+  else if (ev.key === 'ArrowLeft' && state.idx > 0){ state.idx--; render(); }
+  else if (['1','2','3','4'].includes(ev.key)){
+    const opt = state.items[state.idx].opts[Number(ev.key) - 1];
+    if (opt !== undefined){ state.answers[state.idx] = opt; render(); }
+  }
+});
+
+/* ---------- results ---------- */
+function levelFor(p){
+  if (p >= 90) return ['Great', 'You understand almost all the ideas very well. Keep it up!'];
+  if (p >= 80) return ['Good', 'You understand most of the ideas. Review the few mistakes below.'];
+  if (p >= 70) return ['Passing', 'You know the basic ideas, but some parts are missing or mixed up. Read the explanations and practice more.'];
+  return ['Needs more work', 'You are still learning these ideas. Review your notes and the explanations below, then try a new quiz.'];
+}
+
+function finish(){
+  const items = state.items, total = items.length;
+  const right = items.filter((it, i) => state.answers[i] === it.correct).length;
+  const pct = Math.round(right / total * 100);
+  const [lvl, msg] = levelFor(pct);
+  $('ring').style.setProperty('--p', pct);
+  $('scoreNum').textContent = `${right}/${total}`;
+  $('scorePct').textContent = `${pct}% correct`;
+  $('resName').textContent = state.name;
+  $('resLevel').textContent = lvl;
+  $('resMsg').textContent = msg;
+
+  const bars = $('bars'); bars.innerHTML = '';
+  Object.keys(CYCLES).forEach(c => {
+    const idxs = items.map((it, i) => it.c === c ? i : -1).filter(i => i >= 0);
+    if (!idxs.length) return;
+    const ok = idxs.filter(i => state.answers[i] === items[i].correct).length;
+    const p = ok / idxs.length * 100;
+    const color = p >= 70 ? 'var(--good)' : p >= 50 ? 'var(--warm)' : 'var(--bad)';
+    const row = document.createElement('div');
+    row.className = 'bar';
+    row.innerHTML = `<span>${esc(CYCLES[c])}</span><span class="track"><i style="width:${p}%;background:${color}"></i></span><span class="num">${ok}/${idxs.length}</span>`;
+    bars.appendChild(row);
+  });
+
+  $('waBtn').href = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(summaryText());
+
+  state.filter = 'all';
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-pressed', String(t.dataset.f === 'all')));
+  renderReview();
+  show('results');
+}
+
+function renderReview(){
+  const box = $('review'); box.innerHTML = '';
+  state.items.forEach((it, i) => {
+    const mine = state.answers[i];
+    const ok = mine === it.correct;
+    if (state.filter === 'wrong' && ok) return;
+    if (state.filter === 'right' && !ok) return;
+    const el = document.createElement('article');
+    el.className = 'ritem' + (ok ? '' : ' wrong');
+    el.innerHTML = `
+      <div class="head"><span>Question ${i + 1} · ${esc(CYCLES[it.c])}</span><span class="tag ${ok ? 'ok' : 'no'}">${ok ? 'Correct' : (mine === null ? 'Not answered' : 'Incorrect')}</span></div>
+      <div style="font-weight:600;font-size:18px">${fmt(it.q)}</div>
+      ${it.code ? `<pre>${esc(it.code)}</pre>` : ''}
+      <div class="ans">
+        <span class="lbl">Your answer</span>
+        <span class="yours ${ok ? 'ok' : 'no'}">${mine === null ? '— (no answer)' : fmt(mine)}</span>
+      </div>
+      ${ok ? '' : `<div class="ans"><span class="lbl">Correct answer</span><span>${fmt(it.correct)}</span></div>`}
+      <div class="why"><b>Why:</b> ${fmt(it.e)}</div>`;
+    box.appendChild(el);
+  });
+  if (!box.children.length){
+    const p = document.createElement('p'); p.className = 'muted'; p.style.margin = '0';
+    p.textContent = state.filter === 'wrong' ? 'No incorrect answers. Excellent work!' : 'No correct answers yet. Read the explanations and try again.';
+    box.appendChild(p);
+  }
+}
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  state.filter = t.dataset.f;
+  document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-pressed', String(x === t)));
+  renderReview();
+}));
+
+$('again').addEventListener('click', () => { buildQuiz(); show('quiz'); render(); });
+
+const WA_NUMBER = '573338123753';
+const SHORT = { c1:'C1 Automation', c2:'C2 Conservation', c3:'C3 Variables', c4:'C4 Conditionals', c5:'C5 Loops', c6:'C6-8 Incubator' };
+function summaryText(){
+  const items = state.items;
+  const clean = (s) => String(s).replace(/`/g,'');
+  const right = items.filter((it, i) => state.answers[i] === it.correct).length;
+  const pct = Math.round(right / items.length * 100);
+  let when = '';
+  try { when = new Date().toLocaleString('es-CO', { dateStyle:'short', timeStyle:'short' }); } catch (e) { when = new Date().toISOString(); }
+  const topics = Object.keys(CYCLES).map(c => {
+    const idxs = items.map((it, i) => it.c === c ? i : -1).filter(i => i >= 0);
+    if (!idxs.length) return null;
+    const ok = idxs.filter(i => state.answers[i] === items[i].correct).length;
+    return `${SHORT[c]} ${ok}/${idxs.length}`;
+  }).filter(Boolean);
+  const lines = [
+    '*CS & Robotics 7° · Term III Quiz*',
+    `Student: ${state.name}`,
+    `Score: ${right}/${items.length} (${pct}%) · ${levelFor(pct)[0]}`,
+    `Date: ${when}`,
+    `By topic: ${topics.join(' · ')}`
+  ];
+  const wrong = items.map((it, i) => ({ it, i })).filter(x => state.answers[x.i] !== x.it.correct);
+  if (wrong.length){
+    lines.push('', 'Incorrect answers:');
+    wrong.forEach(({ it, i }) => {
+      const q = clean(it.q);
+      lines.push(`${i + 1}. [${SHORT[it.c]}] ${q.length > 90 ? q.slice(0, 87) + '...' : q}`);
+      lines.push(`   Answered: ${state.answers[i] === null ? '(no answer)' : clean(state.answers[i])} | Correct: ${clean(it.correct)}`);
+    });
+  } else {
+    lines.push('', 'All answers correct!');
+  }
+  return lines.join('\n');
+}
+
+$('copyBtn').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(summaryText()); $('copied').textContent = 'Copied. Paste it in a message or document.'; }
+  catch (e) { $('copied').textContent = 'Copy is not available here. Take a screenshot of this page instead.'; }
+});
+</script>
+</body>
+</html>
